@@ -1,16 +1,16 @@
-classdef ParameterizedTestExample < matlab.unittest.TestCase
-    % Creates 12 test points, one test point for the 15th day of every month of 2021
+classdef DayOfWeekTests < matlab.unittest.TestCase
+    % Creates 7 test points, one for each day of the week
     
 	% Copyright 2022 The MathWorks, Inc.
 	
     properties (TestParameter)
-        monthNum = num2cell(1:12);
-        dayNum = {15};
+        monthNum = {1};
+        dayNum = num2cell(3:9);
         yearNum = {2021};
     end
     
     methods (Test)
-        function testDayofyear(testCase,monthNum,dayNum,yearNum)
+        function testDayofweek(testCase,monthNum,dayNum,yearNum)
             % Convert numeric values to mm/dd/yyyy string
             % Note: MATLAB will automatically convert numbers to strings
             % when performing number+string arithmetic
@@ -18,15 +18,16 @@ classdef ParameterizedTestExample < matlab.unittest.TestCase
             
             % Compute expected result
             dt = datetime(dateStr,"Format","MM/dd/uuuu");
-            doyExpected = day(dt,"dayofyear");
+            [dowExpected,nameExpected] = weekday(dt,"long");
+            nameExpected = string(nameExpected);
             
             % Compute actual result
-            doyActual = dayofyear(dateStr);
+            [dowActual,nameActual] = dayofweek(dateStr);
             
             % Verify that the actual result matches the expected result
-            testCase.verifyEqual(doyActual,doyExpected)
+            testCase.verifyEqual(dowActual,dowExpected);
+            testCase.verifyEqual(nameActual,nameExpected);
         end
     end
     
 end
-
